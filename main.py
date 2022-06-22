@@ -28,8 +28,15 @@ async def publisher_queue(data: Request):
     else:
         nw = ll.last_node()
         nw.next = node
-    
-    return json.dumps({"Response":"SUCESS"})
+    topic_name = data.queue_name
+    sub_name = []
+    for k,v in queue_subs.items():
+        if topic_name in v.keys():
+            sub_name.append(k)
+    if len(sub_name)>0:
+        return json.dumps({"Response":"SUCESS","Subscibers_name which are notified" : sub_name})
+    else:
+        return json.dumps({"Response":"SUCESS","Subscibers_name which are notified" : "No Subscriber exists"})
 
 
 @app.post("/sub/")
